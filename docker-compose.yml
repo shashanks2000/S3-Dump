@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app-s3-consumer:
+    build: .
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092     # <= use 'kafka', not 'kafka-1'
+      TOPIC_NAME: "api-data-topic"
+      CONSUMER_GROUP: "api-data-consumer-group"
+      AUTO_OFFSET_RESET: "earliest"
+      BASE_URL: ${BASE_URL}
+      API_KEY: ${API_KEY}
+      FETCH_INTERVAL: "2"
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_BUCKET: ${AWS_BUCKET}
+    command: ["python", "main.py"]
+    networks: [kafka-net]
+
+networks:
+  kafka-net:
+    external: true
